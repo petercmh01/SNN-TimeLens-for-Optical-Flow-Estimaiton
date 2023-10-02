@@ -92,7 +92,7 @@ class CSNN(nn.Module):
         ### Decoding ###
 
         self.block7 = nn.Sequential(
-        nn.Upsample(scale_factor=2, mode='nearest'),
+        nn.Upsample(scale_factor=2, mode='bilinear'),
         layer.Conv2d(512, 512, kernel_size=3, padding=1, bias=False),
         neuron.IFNode(surrogate_function=surrogate.ATan()),)
 
@@ -102,7 +102,7 @@ class CSNN(nn.Module):
         layer.Conv2d(512, 512, kernel_size=3, padding=1, bias=False),
         neuron.IFNode(surrogate_function=surrogate.ATan()),
 
-        nn.Upsample(scale_factor=2, mode='nearest'),
+        nn.Upsample(scale_factor=2, mode='bilinear'),
 
         layer.Conv2d(512, 256, kernel_size=3, padding=1, bias=False),
         neuron.IFNode(surrogate_function=surrogate.ATan()),)
@@ -113,7 +113,7 @@ class CSNN(nn.Module):
         layer.Conv2d(256, 256, kernel_size=3, padding=1, bias=False),
         neuron.IFNode(surrogate_function=surrogate.ATan()),
 
-        nn.Upsample(scale_factor=2, mode='nearest'),
+        nn.Upsample(scale_factor=2, mode='bilinear'),
 
         layer.Conv2d(256, 128, kernel_size=3, padding=1, bias=False),
         neuron.IFNode(surrogate_function=surrogate.ATan()),)
@@ -124,7 +124,7 @@ class CSNN(nn.Module):
         layer.Conv2d(128, 128, kernel_size=3, padding=1, bias=False),
         neuron.IFNode(surrogate_function=surrogate.ATan()),
 
-        nn.Upsample(scale_factor=2, mode='nearest'),
+        nn.Upsample(scale_factor=2, mode='bilinear'),
 
         layer.Conv2d(128, 64, kernel_size=3, padding=1, bias=False),
         neuron.IFNode(surrogate_function=surrogate.ATan()),)
@@ -135,7 +135,7 @@ class CSNN(nn.Module):
         layer.Conv2d(64, 64, kernel_size=3, padding=1, bias=False),
         neuron.IFNode(surrogate_function=surrogate.ATan()),
 
-        nn.Upsample(scale_factor=2, mode='nearest'),
+        nn.Upsample(scale_factor=2, mode='bilinear'),
 
         layer.Conv2d(64, 32, kernel_size=3, padding=1, bias=False),
         neuron.IFNode(surrogate_function=surrogate.ATan()),)
