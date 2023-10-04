@@ -92,17 +92,17 @@ class CSNN(nn.Module):
         ### Decoding ###
 
         self.block7 = nn.Sequential(
-        nn.Upsample(scale_factor=2, mode='bilinear'),
+        nn.Upsample(scale_factor=2, mode='nearest'),
         layer.Conv2d(512, 512, kernel_size=3, padding=1, bias=False),
         neuron.IFNode(surrogate_function=surrogate.ATan()),)
 
         # residual in
 
         self.block8 = nn.Sequential(
-        layer.Conv2d(512, 512, kernel_size=3, padding=1, bias=False),
+        layer.Conv2d(1024, 512, kernel_size=3, padding=1, bias=False),
         neuron.IFNode(surrogate_function=surrogate.ATan()),
 
-        nn.Upsample(scale_factor=2, mode='bilinear'),
+        nn.Upsample(scale_factor=2, mode='nearest'),
 
         layer.Conv2d(512, 256, kernel_size=3, padding=1, bias=False),
         neuron.IFNode(surrogate_function=surrogate.ATan()),)
@@ -110,10 +110,10 @@ class CSNN(nn.Module):
         # resiual in
 
         self.block9 = nn.Sequential(
-        layer.Conv2d(256, 256, kernel_size=3, padding=1, bias=False),
+        layer.Conv2d(512, 256, kernel_size=3, padding=1, bias=False),
         neuron.IFNode(surrogate_function=surrogate.ATan()),
 
-        nn.Upsample(scale_factor=2, mode='bilinear'),
+        nn.Upsample(scale_factor=2, mode='nearest'),
 
         layer.Conv2d(256, 128, kernel_size=3, padding=1, bias=False),
         neuron.IFNode(surrogate_function=surrogate.ATan()),)
@@ -121,10 +121,10 @@ class CSNN(nn.Module):
         # residual in
 
         self.block10 = nn.Sequential(
-        layer.Conv2d(128, 128, kernel_size=3, padding=1, bias=False),
+        layer.Conv2d(256, 128, kernel_size=3, padding=1, bias=False),
         neuron.IFNode(surrogate_function=surrogate.ATan()),
 
-        nn.Upsample(scale_factor=2, mode='bilinear'),
+        nn.Upsample(scale_factor=2, mode='nearest'),
 
         layer.Conv2d(128, 64, kernel_size=3, padding=1, bias=False),
         neuron.IFNode(surrogate_function=surrogate.ATan()),)
@@ -132,10 +132,10 @@ class CSNN(nn.Module):
         # residual in
 
         self.block11 = nn.Sequential(
-        layer.Conv2d(64, 64, kernel_size=3, padding=1, bias=False),
+        layer.Conv2d(128, 64, kernel_size=3, padding=1, bias=False),
         neuron.IFNode(surrogate_function=surrogate.ATan()),
 
-        nn.Upsample(scale_factor=2, mode='bilinear'),
+        nn.Upsample(scale_factor=2, mode='nearest'),
 
         layer.Conv2d(64, 32, kernel_size=3, padding=1, bias=False),
         neuron.IFNode(surrogate_function=surrogate.ATan()),)
@@ -143,7 +143,7 @@ class CSNN(nn.Module):
         ### residual in
 
         self.block12 = nn.Sequential(
-        layer.Conv2d(32, 2, kernel_size=3, padding=1, bias=False),
+        layer.Conv2d(64, 2, kernel_size=3, padding=1, bias=False),
         neuron.IFNode(surrogate_function=surrogate.ATan()),
 
         layer.Conv2d(2, 2, kernel_size=1, padding=0, bias=False),
@@ -157,11 +157,11 @@ class CSNN(nn.Module):
       e4 = self.block4(e3)
       e5 = self.block5(e4)
       e6 = self.block6(e5)
-      d7 = self.block7(e6) + e5
-      d8 = self.block8(d7) + e4
-      d9 = self.block8(d8) + e3
-      d10 = self.block8(d9) + e2
-      d11 = self.block8(d10) + e1
+      d7 = torch.cat((self.block7(e6),e5), dim=1)
+      d8 = torch.cat((self.block7(d7),e4), dim=1)
+      d9 = torch.cat((self.block7(d8),e3), dim=1)
+      d10 = torch.cat((self.block7(d9),e2), dim=1)
+      d11 = torch.cat((self.block7(d10),e1), dim=1)
       d12 = self.block8(d11)
 
       return d12
